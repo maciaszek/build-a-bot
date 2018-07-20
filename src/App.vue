@@ -29,15 +29,16 @@ export default {
 </script>
 
 <style>
-body {
+  body {
   background: linear-gradient(to bottom, #555, #999);
   background-attachment: fixed;
 }
+</style>
 
+<style scope>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
-
 main {
   margin: 0 auto;
   padding: 30px;
