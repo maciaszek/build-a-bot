@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div v-if="availableParts" class="content">
       <div class="preview">
         <CollapsableSection>
           <div class="preview-content">
@@ -45,34 +45,19 @@
               position="bottom"
               @partSelected="part => selectedRobot.base=part" />
         </div>
-        <div>
-          <h1>Cart</h1>
-          <table>
-            <thead>
-              <tr>
-                <th>Robot</th>
-                <th class="cost">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(robot, index) in cart" :key="index">
-                <td>{{robot.head.title}}</td>
-                <td>{{robot.cost}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
     </div>
 </template>
 
 <script>
-import availableParts from '../data/parts';
 import createdHookMixin from './created-hook.mixin';
 import PartSelector from './PartSelector.vue';
 import CollapsableSection from '../shared/CollapsableSection.vue';
 
 export default {
   name: 'RobotBuilder',
+  created() {
+    this.$store.dispatch('getParts');
+  },
   beforeRouteLeave(to, from, next) {
     if (this.addedToCart) {
       next(true);
@@ -84,7 +69,6 @@ export default {
   components: { PartSelector, CollapsableSection },
   data() {
     return {
-      availableParts,
       addedToCart: false,
       cart: [],
       selectedRobot: {
@@ -101,6 +85,9 @@ export default {
     headBorderStyle() {
       return { border: this.selectedRobot.head.onSale ? '3px solid red' : '' };
     },
+    availableParts() {
+      return this.$store.state.parts;
+    },
   },
   methods: {
     addToCart() {
@@ -112,7 +99,7 @@ export default {
         robot.rightArm.cost +
         robot.base.cost;
 
-      this.cart.push(Object.assign({}, robot, { cost }));
+      this.$store.commit('addRobotToCart', Object.assign({}, robot, { cost }));
       this.addedToCart = true;
     },
   },
@@ -227,12 +214,7 @@ export default {
   padding: 3px;
   font-size: 16px;
 }
-td,
-th {
-  text-align: left;
-  padding: 5px;
-  padding-right: 20px;
-}
+
 .sale-border {
   border: 3px solid red;
 }
