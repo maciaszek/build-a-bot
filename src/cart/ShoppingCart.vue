@@ -14,7 +14,7 @@
                         {{robot.head.title}}
                     </td>
                     <td class="cost">
-                        {{robot.cost}}
+                        {{robot.cost | currency('$')}}
                     </td>
                 </tr>
             </tbody>
@@ -33,7 +33,7 @@
                         {{robot.head.title}}
                     </td>
                     <td class="cost">
-                        {{robot.cost}}
+                        {{robot.cost | currency('$')}}
                     </td>
                 </tr>
             </tbody>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'Cart',
   computed: {
